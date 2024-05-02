@@ -2,14 +2,13 @@
 #Tornado DH
 
 import pygame
-import os
 import math
 import random
 
 #display settings
 pygame.init()
 
-width = 800
+width = 1200
 height = 500
 
 win = pygame.display.set_mode((width,height))
@@ -19,12 +18,12 @@ pygame.display.set_caption("hangman game by the greatest Tornado DH")
 WHITE=(255,255,255)
 BLACK = (0,0,0)
 
-Letter_Font = pygame.font.SysFont("comic sans",40)
+Letter_Font = pygame.font.SysFont("comicsans",40)
 Word_Font = pygame.font.SysFont('comicsans', 60)
 Title_Font = pygame.font.SysFont('comicsans', 70)
 
 Hangman_image_counter=0
-words = ["IDE", "REPLIT", "PYTHON", "PYGAME","TALL","TEST","HAPPY"]
+words = ["IDE", "REPLIT", "PYTHON", "PYGAME","TALL","TEST","HAPPY","INTERNATIONAL","MECHATRONICS"]
 word = random.choice(words)
 guessed = []
 
@@ -38,10 +37,10 @@ for i in range(7):
 #buttons settings
 radius = 20
 gap = 15
-letters = []
 start_x = round((width - (radius*2 + gap)*13) / 2)
 start_y = 400
 A = 65
+letters = []
 
 for i in range(26):
     x= start_x + gap*2 + ((radius*2 + gap)*(i % 13))
@@ -83,19 +82,23 @@ def draw():
 
 def mouse_click():
     global Hangman_image_counter
-    
-    position_Of_Mouse = pygame.MOUSEBUTTONDOWN
-    if event.type == position_Of_Mouse:
-        m_x, m_y = pygame.mouse.get_pos()
-        for ltr in letters:
-            x, y, letter, visible = ltr
-            if visible:
-                dis = math.sqrt((x - m_x) ** 2 + (y - m_y) ** 2)
-                if radius > dis:
-                    ltr[3] = False
-                    guessed.append(letter)
-                    if letter not in word:
-                        Hangman_image_counter += 1
+    global run
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        position_Of_Mouse = pygame.MOUSEBUTTONDOWN
+        if event.type == position_Of_Mouse:
+            m_x, m_y = pygame.mouse.get_pos()
+            for ltr in letters:
+                x, y, letter, visible = ltr
+                if visible:
+                    dis = math.sqrt((x - m_x) ** 2 + (y - m_y) ** 2)
+                    if radius > dis:
+                        ltr[3] = False
+                        guessed.append(letter)
+                        if letter not in word:
+                            Hangman_image_counter += 1
 
 def display_message(message):
     pygame.time.delay(1000)
@@ -112,11 +115,7 @@ run = True
 while run:
     clock.tick(60)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        mouse_click()
-
+    mouse_click()
     draw()
 
     won = True
